@@ -6,11 +6,14 @@ import multiprocessing
 import time
 
 def count_ppl(duration):
+  
+    speeds = []
+    counts = []
     # Load YOLO
     net = cv2.dnn.readNet('./models/yolov3.weights', './models/yolov3.cfg')
     layer_names = net.getLayerNames()
     output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
-    classes = ["person"]  # Assuming you are only interested in detecting people
+    classes = ["person"]  
 
     # Initialize SORT tracker
     tracker = SortTracker()
@@ -87,10 +90,12 @@ def count_ppl(duration):
             x, y, w, h, track_id,_,_ = track
             if track_id in hashmap.keys():
                 items += 1
+                counts.append(items)
                 old_x, old_y = hashmap[track_id]
                 dist = math.sqrt((old_x - x) ** 2 + (old_y - y) ** 2)
-                norm_dist = dist / diag
+              
                 speed += dist
+                speeds.append(speed)
             
             hashmap[track_id] = (x,y)
 
@@ -99,8 +104,7 @@ def count_ppl(duration):
 
         # Display the resulting frame
         cv2.imshow('Frame', frame)
-        if items:
-            print(speed/items)
+       
         # Break the loop
         if cv2.waitKey(1) & 0xFF == ord('q') or time.time() - start_time > duration:
             
@@ -110,8 +114,12 @@ def count_ppl(duration):
     cap.release()
     cv2.destroyAllWindows()
    
-    return (items,speed)
-
+    return (avg(counts),avg(speeds))
+def avg(lst): 
+    if len(lst):
+        return sum(lst) / len(lst) 
+    else:
+        return 0
 if __name__ == "__main__":
 
     queue = multiprocessing.Queue()
