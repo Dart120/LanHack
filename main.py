@@ -41,7 +41,7 @@ while True:
     like_checked = False
     liked = False
     while player.get_busy():
-        if time() - start > 5 and not vibe_checked:
+        if time() - start > 60 and not vibe_checked:
             print("Assessing Vibeee......")
        
             people, distance = count_ppl(20)
