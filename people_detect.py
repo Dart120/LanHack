@@ -5,7 +5,7 @@ import math
 import multiprocessing
 import time
 
-def count_ppl(duration,queue):
+def count_ppl(duration):
     # Load YOLO
     net = cv2.dnn.readNet('./models/yolov3.weights', './models/yolov3.cfg')
     layer_names = net.getLayerNames()
@@ -110,7 +110,7 @@ def count_ppl(duration,queue):
     cap.release()
     cv2.destroyAllWindows()
    
-    queue.put((items,speed))
+    return (items,speed)
 
 if __name__ == "__main__":
 
