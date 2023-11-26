@@ -1,9 +1,10 @@
 from __future__ import print_function, unicode_literals
 from PyInquirer import prompt, print_json
-from player import play,player_init
+from player import play,player_init,hashmapify
 from time import time
 from people_detect import count_ppl
 player_init()
+hashmapify()
 questions = [
     {
         'type': 'input',
